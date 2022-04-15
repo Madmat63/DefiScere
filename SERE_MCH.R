@@ -11,8 +11,8 @@ Gene<- read.table("gene.txt",sep = "\t", header = T,check.names = FALSE,fill=TRU
 
 
 #### Correspondance Gene ####
-#Nom de gene diffÈrents entre article et sortie galaxy, correspondance effectuÈe sur Yeastmine mais deux noms de gËnes
-#modifiÈs DUR1,2 -> DUR12 02-oct -> OCT1
+#Nom de gene diff?rents entre article et sortie galaxy, correspondance effectu?e sur Yeastmine mais deux noms de g?nes
+#modifi?s DUR1,2 -> DUR12 02-oct -> OCT1
 
 #renommer les colonnes par celle de l'article
 colnames(expData)<-colnames(SereData)
@@ -58,23 +58,25 @@ expData4$name <- factor(expData4$name,level=unique(expData4$name))
 ggplot(expData4,aes(x=name,y=rowname,fill=value))+geom_tile()+
   #geom_tile = heatmap
   scale_fill_gradient2(low = "#03f9f9", high = "#f4f402", mid = "#050302",midpoint = 0, limit = c(-1.5,1.5),oob=squish)+
-  #choix couleur gradient et "oob" permet de gÈrer les outliers des l'Èchelle choisies
+  #choix couleur gradient et "oob" permet de g?rer les outliers des l'?chelle choisies
   scale_x_discrete(breaks=c("0","50","100","150","200"))+
-  #couper l'Èchelle en valeurs voulues
+  #couper l'?chelle en valeurs voulues
   theme(axis.text.y=element_blank(),axis.ticks.y=element_blank(),plot.title=element_text(face="italic"))+
-  #Permet de modifier les paramÍtres graphiques comme le titre et enlever les valeurs en Y trop nombreuses
+  #Permet de modifier les param?tres graphiques comme le titre et enlever les valeurs en Y trop nombreuses
   xlab("Times (minutes)")+ylab(paste("Top Periodic Genes (",nrow(expData3),")"))+ggtitle("Saccharomyces cerevisiae")
 
 #ggsave("Sere.png", height=10, width=7)
 
 #### Let's go Tidy ####
 
-# la fonction rownames_to_column pourrait Ítre aussi inclus mais pas de solution trouvÈ pour conserver l'ordre des y
+# la fonction rownames_to_column pourrait ?tre aussi inclus mais pas de solution trouv? pour conserver l'ordre des y
 expData3 %>%
   pivot_longer(c(2:ncol(.)))%>%
   ggplot(aes(x=fct_inorder(name),y=fct_inorder(rowname),fill=value))+geom_tile()+
   #fc_inorder permet de garder l'ordre dans la matrice (seulement en tidy)
   scale_fill_gradient2(low = "#03f9f9", high = "#f4f402", mid = "#050302",midpoint = 0, limit = c(-1.5,1.5),oob=squish)+
+  #Essai pour mettre High and Low sur la l√©gende
+  #scale_fill_gradientn(colours = c("#03f9f9","#050302","#f4f402"),breaks=c(-1.5,-1.0,-0.5,0,0.5,1.0,1.5),limit = c(-1.5,1.5),oob=squish)+
   scale_x_discrete(breaks=c("0","50","100","150","200"))+
   theme(axis.text.y=element_blank(),axis.ticks.y=element_blank(),plot.title=element_text(face="italic"))+
   xlab("Times (minutes)")+ylab(paste("Top Periodic Genes (1196)"))+ggtitle("Saccharomyces cerevisiae")
